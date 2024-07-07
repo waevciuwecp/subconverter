@@ -242,6 +242,14 @@ namespace INIBinding
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
                     String strategy = vArray[rules_upper_bound + 2];
 
+                    // Print all elements of vArray to log
+                    for (const auto& value : vArray) {
+                        writeLog(0,"Checking value " + value, LOG_LEVEL_VERBOSE);
+                    }
+                    
+                    writeLog(0,"Checking rules_upper_bound " + rules_upper_bound, LOG_LEVEL_VERBOSE);
+
+
                     writeLog(0, "Parsing LoadBalance Strategy " + strategy, LOG_LEVEL_VERBOSE);
                     
                     switch(hash_(strategy))
