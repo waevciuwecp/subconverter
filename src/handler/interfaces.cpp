@@ -61,6 +61,7 @@ const std::vector<UAProfile> UAMatchList = {
         {"ClashForAndroid", "\\/([0-9.]+)",      "2.0",  "clash",  true},
         {"ClashForAndroid", "\\/([0-9.]+)R",     "",     "clashr", false},
         {"ClashForAndroid", "",                  "",     "clash",  false},
+        {"ClashMetaForAndroid", "",              "",     "clash",  false},
         {"ClashforWindows", "\\/([0-9.]+)",      "0.11", "clash",  true},
         {"ClashforWindows", "",                  "",     "clash",  false},
         {"ClashX Pro",      "",                  "",     "clash",  true},
