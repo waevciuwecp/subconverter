@@ -224,13 +224,38 @@ namespace INIBinding
                     continue;
                 }
 
-                if(conf.Type == ProxyGroupType::URLTest || conf.Type == ProxyGroupType::LoadBalance || conf.Type == ProxyGroupType::Fallback)
+                if(conf.Type == ProxyGroupType::URLTest || conf.Type == ProxyGroupType::Fallback || (conf.Type == ProxyGroupType::LoadBalance && rules_upper_bound < 5))
                 {
                     if(rules_upper_bound < 5)
                         continue;
                     rules_upper_bound -= 2;
                     conf.Url = vArray[rules_upper_bound];
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
+                }
+
+                if(conf.Type == ProxyGroupType::LoadBalance)
+                {
+                    if(rules_upper_bound < 6)
+                        continue;
+                    rules_upper_bound -= 3;
+                    conf.Url = vArray[rules_upper_bound];
+                    parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
+                    String strategy = vArray[rules_upper_bound + 2];
+
+                    writeLog(0, "Parsing LoadBalance Strategy " + strategy);
+                    
+                    switch(hash_(strategy))
+                    {
+                    case "consistent-hashing"_hash:
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
+                        break;
+                    case "round-robin"_hash:
+                        conf.Strategy = BalanceStrategy::RoundRobin;
+                        break;
+                    default:
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
+                    }
+
                 }
 
                 for(unsigned int i = 2; i < rules_upper_bound; i++)
