@@ -237,18 +237,20 @@ namespace INIBinding
                 {
                     if(rules_upper_bound < 5)
                         continue;
-                    rules_upper_bound -= 2;
-                    conf.Url = vArray[rules_upper_bound];
-                    parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
-                    String strategy = vArray[rules_upper_bound + 2];
-
+                        
                     // Print all elements of vArray to log
                     for (const auto& value : vArray) {
                         writeLog(0,"Checking value " + value, LOG_LEVEL_VERBOSE);
                     }
                     
-                    writeLog(0,"Checking rules_upper_bound " + rules_upper_bound, LOG_LEVEL_VERBOSE);
+                    writeLog(0,"Checking rules_upper_bound (pre)" + rules_upper_bound, LOG_LEVEL_VERBOSE);
+                    rules_upper_bound -= 2;
+                    writeLog(0,"Checking rules_upper_bound (post)" + rules_upper_bound, LOG_LEVEL_VERBOSE);
 
+                    conf.Url = vArray[rules_upper_bound];
+                    parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
+                    
+                    String strategy = vArray[rules_upper_bound + 2];
 
                     writeLog(0, "Parsing LoadBalance Strategy " + strategy, LOG_LEVEL_VERBOSE);
                     
