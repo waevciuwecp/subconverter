@@ -1,5 +1,6 @@
 name: Publish Docker Image
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     tags:
@@ -10,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  REGISTRY_IMAGE: asdlokj1qpi23/subconverter
+  REGISTRY_IMAGE: yaoyinying/subconverter
 
 jobs:
   build:

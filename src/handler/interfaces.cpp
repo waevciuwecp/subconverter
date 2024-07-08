@@ -61,6 +61,7 @@ const std::vector<UAProfile> UAMatchList = {
         {"ClashForAndroid", "\\/([0-9.]+)",      "2.0",  "clash",  true},
         {"ClashForAndroid", "\\/([0-9.]+)R",     "",     "clashr", false},
         {"ClashForAndroid", "",                  "",     "clash",  false},
+        {"ClashMetaForAndroid", "",              "",     "clash",  false},
         {"ClashforWindows", "\\/([0-9.]+)",      "0.11", "clash",  true},
         {"ClashforWindows", "",                  "",     "clash",  false},
         {"ClashX Pro",      "",                  "",     "clash",  true},
@@ -297,6 +298,8 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS) {
     if (argTarget == "auto")
         matchUserAgent(request.headers["User-Agent"], argTarget, argClashNewField, intSurgeVer);
 
+
+    writeLog(0,"Matching User-Agent to argTarget = " + argTarget, LOG_LEVEL_VERBOSE);
     /// don't try to load groups or rulesets when generating simple subscriptions
     bool lSimpleSubscription = false;
     switch (hash_(argTarget)) {
