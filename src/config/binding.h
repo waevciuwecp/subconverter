@@ -235,23 +235,13 @@ namespace INIBinding
 
                 if(conf.Type == ProxyGroupType::LoadBalance)
                 {
-
-                    // Print all elements of vArray to log
-                    for (const auto& value : vArray) {
-                        writeLog(0,"Checking value " + value, LOG_LEVEL_VERBOSE);
-                    
-                    }
-                    writeLog(0,"Checking rules_upper_bound (pre) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
-
                     if(rules_upper_bound < 5){
                         writeLog(0,"Ingore invalid proxy group " + conf.Name, LOG_LEVEL_VERBOSE);
                         continue;
                     }
-                       
+                    
 
                     String last_element= vArray[rules_upper_bound - 1];
-
-                    writeLog(0,"Checking last_element of proxy group " + last_element, LOG_LEVEL_VERBOSE);
 
                     switch(hash_(last_element))
                     {
@@ -259,15 +249,16 @@ namespace INIBinding
                         conf.Strategy = BalanceStrategy::ConsistentHashing;
                         rules_upper_bound -= 3;
                         writeLog(0,"LoadBalance strategy is explicitly set as " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
-                        
                         break;
                     case "round-robin"_hash:
                         conf.Strategy = BalanceStrategy::RoundRobin;
                         rules_upper_bound -= 3;
+                        writeLog(0,"LoadBalance strategy is explicitly set as " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
                         break;
                     case ""_hash:
                         rules_upper_bound -= 3;
                         conf.Strategy = BalanceStrategy::ConsistentHashing;
+                        writeLog(0,"LoadBalance strategy is explicitly set as empty, use " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
                         break;
                     default:
                         conf.Strategy = BalanceStrategy::ConsistentHashing;
@@ -275,12 +266,8 @@ namespace INIBinding
                         rules_upper_bound -= 2;
                     }
 
-                    writeLog(0,"Checking rules_upper_bound (post) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
-
                     conf.Url = vArray[rules_upper_bound];
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
-
-                    writeLog(0, "Get LoadBalance Strategy " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
                 }
 
                 for(unsigned int i = 2; i < rules_upper_bound; i++)
