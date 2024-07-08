@@ -235,24 +235,42 @@ namespace INIBinding
 
                 if(conf.Type == ProxyGroupType::LoadBalance)
                 {
-                    if(rules_upper_bound < 6)
+                    if(rules_upper_bound < 5)
+                        writeLog(0,"Ingore invalid proxy group " + conf.Name + "( "+ conf.Type + " )", LOG_LEVEL_VERBOSE);
                         continue;
                         
                     // Print all elements of vArray to log
                     for (const auto& value : vArray) {
                         writeLog(0,"Checking value " + value, LOG_LEVEL_VERBOSE);
                     }
-                    
+
                     writeLog(0,"Checking rules_upper_bound (pre) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
-                    rules_upper_bound -= 3;
+
+                    String last_element= vArray[rules_upper_bound-1];
+
+                    String strategy = 'consistent-hashing';
+
+                    if(last_element == 'consistent-hashing' || last_element == 'round-robin' || last_element == '')
+                    {
+                        writeLog(0,"Use customized LoadBalance configure last_element = " + last_element, LOG_LEVEL_VERBOSE);
+                        rules_upper_bound -= 3;
+                        if(last_element != '')
+                        {
+                            strategy = last_element;
+                        }
+
+                    }
+                    else
+                    {
+                        writeLog(0,"LoadBalance strategy is not provide explicitly, use default strategy " + strategy, LOG_LEVEL_VERBOSE);
+                        rules_upper_bound -= 2;
+                    }
                     writeLog(0,"Checking rules_upper_bound (post) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
 
                     conf.Url = vArray[rules_upper_bound];
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
-                    
-                    String strategy = vArray[rules_upper_bound + 2];
 
-                    writeLog(0, "Parsing LoadBalance Strategy " + strategy, LOG_LEVEL_VERBOSE);
+                    writeLog(0, "Get LoadBalance Strategy " + strategy, LOG_LEVEL_VERBOSE);
                     
                     switch(hash_(strategy))
                     {
