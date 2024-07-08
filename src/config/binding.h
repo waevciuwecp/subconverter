@@ -243,9 +243,11 @@ namespace INIBinding
                     }
                     writeLog(0,"Checking rules_upper_bound (pre) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
 
-                    if(rules_upper_bound < 5)
+                    if(rules_upper_bound < 5){
                         writeLog(0,"Ingore invalid proxy group " + conf.Name, LOG_LEVEL_VERBOSE);
                         continue;
+                    }
+                       
 
                     String last_element= vArray[rules_upper_bound - 1];
 
