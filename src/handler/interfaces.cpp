@@ -298,6 +298,8 @@ std::string subconverter(RESPONSE_CALLBACK_ARGS) {
     if (argTarget == "auto")
         matchUserAgent(request.headers["User-Agent"], argTarget, argClashNewField, intSurgeVer);
 
+
+    writeLog(0,"Matching User-Agent to argTarget = " + argTarget + ", argClashNewField = " + argClashNewField + "", LOG_LEVEL_VERBOSE);
     /// don't try to load groups or rulesets when generating simple subscriptions
     bool lSimpleSubscription = false;
     switch (hash_(argTarget)) {

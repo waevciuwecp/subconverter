@@ -243,9 +243,9 @@ namespace INIBinding
                         writeLog(0,"Checking value " + value, LOG_LEVEL_VERBOSE);
                     }
                     
-                    writeLog(0,"Checking rules_upper_bound (pre)" + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
+                    writeLog(0,"Checking rules_upper_bound (pre) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
                     rules_upper_bound -= 3;
-                    writeLog(0,"Checking rules_upper_bound (post)" + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
+                    writeLog(0,"Checking rules_upper_bound (post) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
 
                     conf.Url = vArray[rules_upper_bound];
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
