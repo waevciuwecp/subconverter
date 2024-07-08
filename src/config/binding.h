@@ -224,11 +224,48 @@ namespace INIBinding
                     continue;
                 }
 
-                if(conf.Type == ProxyGroupType::URLTest || conf.Type == ProxyGroupType::LoadBalance || conf.Type == ProxyGroupType::Fallback)
+                if(conf.Type == ProxyGroupType::URLTest || conf.Type == ProxyGroupType::Fallback )
                 {
                     if(rules_upper_bound < 5)
                         continue;
                     rules_upper_bound -= 2;
+                    conf.Url = vArray[rules_upper_bound];
+                    parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
+                }
+
+                if(conf.Type == ProxyGroupType::LoadBalance)
+                {
+                    if(rules_upper_bound < 5){
+                        writeLog(0,"Ingore invalid proxy group " + conf.Name, LOG_LEVEL_VERBOSE);
+                        continue;
+                    }
+                    
+
+                    String last_element= vArray[rules_upper_bound - 1];
+
+                    switch(hash_(last_element))
+                    {
+                    case "consistent-hashing"_hash:
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
+                        rules_upper_bound -= 3;
+                        writeLog(0,"LoadBalance strategy is explicitly set as " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
+                        break;
+                    case "round-robin"_hash:
+                        conf.Strategy = BalanceStrategy::RoundRobin;
+                        rules_upper_bound -= 3;
+                        writeLog(0,"LoadBalance strategy is explicitly set as " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
+                        break;
+                    case ""_hash:
+                        rules_upper_bound -= 3;
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
+                        writeLog(0,"LoadBalance strategy is explicitly set as empty, use " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
+                        break;
+                    default:
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
+                        writeLog(0,"LoadBalance strategy is not provide explicitly, use default strategy consistent-hashing", LOG_LEVEL_VERBOSE);
+                        rules_upper_bound -= 2;
+                    }
+
                     conf.Url = vArray[rules_upper_bound];
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
                 }
