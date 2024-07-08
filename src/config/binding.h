@@ -273,7 +273,7 @@ namespace INIBinding
                     conf.Url = vArray[rules_upper_bound];
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
 
-                    writeLog(0, "Get LoadBalance Strategy " + std::to_string(conf.StrategyStr()), LOG_LEVEL_VERBOSE);
+                    writeLog(0, "Get LoadBalance Strategy " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
                 }
 
                 for(unsigned int i = 2; i < rules_upper_bound; i++)
