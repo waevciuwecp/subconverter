@@ -248,42 +248,32 @@ namespace INIBinding
 
                     String last_element= vArray[rules_upper_bound-1];
 
-                    String strategy = 'consistent-hashing';
-
-                    if(last_element == 'consistent-hashing' || last_element == 'round-robin' || last_element.empty())
+                    switch(hash_(last_element))
                     {
-                        writeLog(0,"Use customized LoadBalance configure last_element = " + last_element, LOG_LEVEL_VERBOSE);
+                    case "consistent-hashing"_hash:
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
                         rules_upper_bound -= 3;
-                        if(! last_element.empty())
-                        {
-                            strategy = last_element;
-                        }
-
-                    }
-                    else
-                    {
-                        writeLog(0,"LoadBalance strategy is not provide explicitly, use default strategy " + strategy, LOG_LEVEL_VERBOSE);
+                        break;
+                    case "round-robin"_hash:
+                        conf.Strategy = BalanceStrategy::RoundRobin;
+                        rules_upper_bound -= 3;
+                        break;
+                    case ""_hash:
+                        rules_upper_bound -= 3;
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
+                        break;
+                    default:
+                        conf.Strategy = BalanceStrategy::ConsistentHashing;
+                        writeLog(0,"LoadBalance strategy is not provide explicitly, use default strategy consistent-hashing", LOG_LEVEL_VERBOSE);
                         rules_upper_bound -= 2;
                     }
+
                     writeLog(0,"Checking rules_upper_bound (post) = " + std::to_string(rules_upper_bound), LOG_LEVEL_VERBOSE);
 
                     conf.Url = vArray[rules_upper_bound];
                     parseGroupTimes(vArray[rules_upper_bound + 1], &conf.Interval, &conf.Timeout, &conf.Tolerance);
 
-                    writeLog(0, "Get LoadBalance Strategy " + strategy, LOG_LEVEL_VERBOSE);
-                    
-                    switch(hash_(strategy))
-                    {
-                    case "consistent-hashing"_hash:
-                        conf.Strategy = BalanceStrategy::ConsistentHashing;
-                        break;
-                    case "round-robin"_hash:
-                        conf.Strategy = BalanceStrategy::RoundRobin;
-                        break;
-                    default:
-                        conf.Strategy = BalanceStrategy::ConsistentHashing;
-                    }
-
+                    writeLog(0, "Get LoadBalance Strategy " + conf.StrategyStr(), LOG_LEVEL_VERBOSE);
                 }
 
                 for(unsigned int i = 2; i < rules_upper_bound; i++)
