@@ -236,7 +236,7 @@ namespace INIBinding
                 if(conf.Type == ProxyGroupType::LoadBalance)
                 {
                     if(rules_upper_bound < 5)
-                        writeLog(0,"Ingore invalid proxy group " + conf.Name + "( "+ conf.Type + " )", LOG_LEVEL_VERBOSE);
+                        writeLog(0,"Ingore invalid proxy group " + conf.Name, LOG_LEVEL_VERBOSE);
                         continue;
                         
                     // Print all elements of vArray to log
@@ -250,11 +250,11 @@ namespace INIBinding
 
                     String strategy = 'consistent-hashing';
 
-                    if(last_element == 'consistent-hashing' || last_element == 'round-robin' || last_element == '')
+                    if(last_element == 'consistent-hashing' || last_element == 'round-robin' || last_element.empty())
                     {
                         writeLog(0,"Use customized LoadBalance configure last_element = " + last_element, LOG_LEVEL_VERBOSE);
                         rules_upper_bound -= 3;
-                        if(last_element != '')
+                        if(! last_element.empty())
                         {
                             strategy = last_element;
                         }
