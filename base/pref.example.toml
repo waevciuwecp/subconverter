@@ -217,7 +217,7 @@ update_ruleset_on_request = false
 
 # [[rulesets]]
 # group = "Proxy"
-# ruleset = "https://raw.githubusercontent.com/DivineEngine/Profiles/master/Surge/Ruleset/Unbreak.list"
+# ruleset = "https://raw.githubusercontent.com/waevciuwecp/DivineEngine/main/Surge/Ruleset/Unbreak.list"
 # type = "surge-ruleset"
 # interval = 86400
 
