@@ -67,6 +67,7 @@ const std::vector<UAProfile> UAMatchList = {
         {"ClashX Pro",      "",                  "",     "clash",  true},
         {"ClashX",          "\\/([0-9.]+)",      "0.13", "clash",  true},
         {"Clash",           "",                  "",     "clash",  true},
+        {"Dart",            "",                  "",     "clash",  false},
         {"Kitsunebi",       "",                  "",     "v2ray"},
         {"Loon",            "",                  "",     "loon"},
         {"Pharos",          "",                  "",     "mixed"},
